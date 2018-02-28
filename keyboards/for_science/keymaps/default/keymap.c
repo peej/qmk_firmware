@@ -18,7 +18,6 @@
 #define _______ KC_TRNS
 
 #define _BASE 0
-#define _BASE_MAC 1
 #define _LAYER 3
 #define _MOD_LAYER 5
 #define _FUNCT 10
@@ -29,6 +28,9 @@
 #define LAY_SLS LT(_LAYER, KC_SLSH)
 #define LAY_SPC LT(_LAYER, KC_SPACE)
 
+#define LOCK LGUI(KC_L)
+#define MAC_LCK LGUI(LCTL(KC_Q))
+
 #define MODS_SHIFT (MOD_BIT(KC_LSHIFT)|MOD_BIT(KC_RSHIFT))
 #define MODS_CTRL (MOD_BIT(KC_LCTL)|MOD_BIT(KC_RCTRL))
 #define MODS_ALT (MOD_BIT(KC_LALT)|MOD_BIT(KC_RALT))
@@ -37,12 +39,6 @@
 
 #define LAYER MO(_LAYER)
 #define FUNCT MO(_FUNCT)
-
-enum custom_keycodes {
-    LA_BASE = SAFE_RANGE,
-    LA_MAC,
-    LOCK
-};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -73,14 +69,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       KC_LCTL, KC_LGUI, KC_LALT,    LAY_SPC, LAYER,   KC_RSFT
 ),
 
-[_BASE_MAC] = KEYMAP(
-    _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,
-                      _______, KC_LALT, KC_LGUI,    _______, _______, _______
-),
-
 [_LAYER] = KEYMAP(
     KC_TILD, KC_GRV,  KC_LABK, KC_UNDS, KC_MINS,    KC_PLUS, KC_EQL,  KC_RABK, KC_BSLS, KC_DEL,
     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
@@ -98,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_FUNCT] = KEYMAP(
-    RESET,   _______, _______, _______, LOCK,       LOCK,    _______, _______, LA_MAC,  LA_BASE,
+    RESET,   _______, _______, _______, LOCK,       MAC_LCK, _______, _______, _______, MAGIC_SWAP_LALT_LGUI,
     _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______,
@@ -106,14 +94,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 };
-
-void matrix_init_user(void) {
-    if (!eeconfig_is_enabled()) {
-        eeconfig_init();
-    }
-    default_layer_set(eeconfig_read_default_layer());
-    layer_on(eeconfig_read_default_layer());
-}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (keyboard_report->mods & MODS_ANY) {
@@ -127,29 +107,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         if (keycode == KC_BSPC && keyboard_report->mods & MODS_ALT) {
             SEND_STRING(SS_TAP(X_DELETE));
-            return false;
-        }
-
-        if (keycode == LA_BASE) {
-            eeconfig_update_default_layer(_BASE);
-            default_layer_set(_BASE);
-            layer_on(_BASE);
-            return false;
-        }
-
-        if (keycode == LA_MAC) {
-            eeconfig_update_default_layer(_BASE_MAC);
-            default_layer_set(_BASE_MAC);
-            layer_on(_BASE_MAC);
-            return false;
-        }
-
-        if (keycode == LOCK) {
-            if (eeconfig_read_default_layer() == _BASE) {
-                MACRO(D(LGUI), T(L), U(LGUI), END);
-            } else {
-                MACRO(D(LGUI), D(LCTL), T(Q), U(LCTL), U(LGUI), END);
-            }
             return false;
         }
     }
