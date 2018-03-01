@@ -23,8 +23,11 @@
 #define _FUNCT 10
 
 #define SFT_A SFT_T(KC_A)
+#define SFT_F1 SFT_T(KC_F1)
 #define SFT_Z SFT_T(KC_Z)
+#define SFT_F6 SFT_T(KC_F6)
 #define LAY_X LT(_LAYER, KC_X)
+#define LAY_F7 LT(_LAYER, KC_F7)
 #define LAY_SLS LT(_LAYER, KC_SLSH)
 #define LAY_SPC LT(_LAYER, KC_SPACE)
 
@@ -57,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |  F6   |  F7   |  F8   |  F9   |  F10  |   | PgDn  | Left  | Down  | Right |       |
  * `-Shift---Layer-+-------+-------+-------+   |-------+-------+-------+---------Layer-'
  *                 | Ctrl  |  Gui  |  Alt  |   | Space | Layer | Shift |
- *                 |       |       |       |   |       |       | Funct |
+ *                 |       |       |       |   | Funct |       |       |
  *                 `------------------------   `-Layer-----------------'
  */
 
@@ -72,9 +75,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LAYER] = KEYMAP(
     KC_TILD, KC_GRV,  KC_LABK, KC_UNDS, KC_MINS,    KC_PLUS, KC_EQL,  KC_RABK, KC_BSLS, KC_DEL,
     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
-    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_SCLN,
-    KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,     KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, _______,
-                      _______, _______, _______,    _______, _______, FUNCT
+    SFT_F1,  KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_SCLN,
+    SFT_F6,  LAY_F7,  KC_F8,   KC_F9,   KC_F10,     KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, _______,
+                      _______, _______, _______,    FUNCT,   _______, _______
 ),
 
 [_MOD_LAYER] = KEYMAP(
